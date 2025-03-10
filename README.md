@@ -41,3 +41,16 @@ Tahmin edilen ve gerçek değerlerin bir tablo olarak sunulmasıdır. Şu bileş
 
 **Değerlendirme Metriklerinin Seçimi:**  
 Tıbbi tanı problemlerinde, sınıf dengesizliklerini ve yanlış negatiflerin önemini göz önünde bulundurarak **F1-Score**, **Recall** ve **Precision** gibi metrikler tercih edilmelidir. Confusion matrix, bu metrikleri detaylı bir şekilde analiz etmeyi mümkün kılar.
+
+
+## Kaynakça
+
+1. **Breast Cancer Dataset**  
+   [Kaggle - Breast Cancer Dataset by Nancy Alaswad](https://www.kaggle.com/datasets/nancyalaswad90/breast-cancer-dataset)
+
+2. **Manuel ve İmplicit Anlatımı**  
+   [YouTube - Manuel Implicit by AssemblyAI](https://www.youtube.com/watch?v=TLInuAorxqE&ab_channel=AssemblyAI)
+
+3. **Repo oluşturma**  
+   [YouTube - Repo Anlatımı by Kadir Alemdar](https://www.youtube.com/watch?v=0QqqOg3Ldcw&ab_channel=KadirAlemdar)
+
