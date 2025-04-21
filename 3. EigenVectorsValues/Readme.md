@@ -88,6 +88,91 @@ Matematiksel olarak, bir matrisi bir skalerle çarpmak, boyutlar uyumsuz olduğu
 
 # EIGENVECTORS AND EIGENVALUES
 
+## Eigendecomposition
+Eigendecomposition, bir matrisin özdeğerler (eigenvalues) ve özvektörler (eigenvectors) kullanılarak ayrıştırılması işlemidir. Bu işlem, lineer cebir ve makine öğrenmesinde çok önemli bir yer tutar. Özellikle veri analizi, boyut indirgeme, ana bileşen analizi (PCA) gibi yöntemlerde kullanılır.
+
+Bir vektör, aşağıdaki denklemi sağlıyorsa bir matrisin özvektörüdür.
+
+A . v = lambda . v
+
+Buna özdeğer denklemi denir, burada A, ayrıştırdığımız ana kare matrisidir, v matrisin özvektörüdür ve lambda, küçük Yunan harfi olup özdeğer skalerini temsil eder.
+
+Bir matris, ana matrisin her bir boyutu için bir özvektör ve bir özdeğere sahip olabilir. Ancak her kare matris özvektörlere ve özdeğerlere ayrıştırılamaz; bazıları ise yalnızca karmaşık sayılar kullanılarak ayrıştırılabilir. Ana matris, özvektörler ve özdeğerlerin bir çarpımı şeklinde ifade edilebilir.
+
+A = Q . diag(V) . Q^-1
+
+Burada Q, özvektörlerden oluşan bir matristir; diag(V), köşegeninde özdeğerlerin bulunduğu bir diagonal (köşegen) matristir (bazen büyük lambda harfi ile gösterilir); Q⁻¹ ise özvektörlerden oluşan matrisin tersidir.
+
+Bir ayrıştırma (decomposition) işlemi, matrisi sıkıştırmaz; bunun yerine matrisi, belirli işlemleri daha kolay gerçekleştirebilmek için temel bileşenlerine ayırır. Diğer matris ayrıştırma yöntemlerinde olduğu gibi, Eigendecomposition (özdeğer ayrıştırması) da daha karmaşık matris işlemlerinin hesaplanmasını kolaylaştırmak amacıyla kullanılan bir araçtır.
+
+
+## Eigenvectors and Eigenvalues
+
+Özvektörler, birim vektörlerdir; yani uzunlukları ya da büyüklükleri 1.0’a eşittir.
+
+Özdeğerler ise özvektörlere uygulanan katsayılardır ve bu katsayılar, vektörlerin uzunluğunu ya da büyüklüğünü belirler.
+
+## Calculation of Eigendecomposition
+Eigendecomposition, kare bir matris üzerinde, detaylarına girmeyeceğimiz verimli bir yinelemeli algoritma ile hesaplanır.
+
+Genellikle önce bir özdeğer bulunur, ardından bu özdeğere karşılık gelen özvektörü bulmak için denklemin katsayıları çözülür.
+
+NumPy kütüphanesinde bu ayrıştırma, eig() fonksiyonu kullanılarak hesaplanabilir.
+
+![image](https://github.com/user-attachments/assets/59d63c3f-2101-4188-b7f7-319f3d547550)
+
+
+# RELATIONS WITH MACHINE LEARNING
+Makine öğrenmesinde matris manipülasyonu, eigenvalues ve eigenvectors çok temel kavramlardır. Bu kavramlar veriyi anlamlandırmak, boyutunu azaltmak, paternleri keşfetmek ve modelleri daha verimli hale getirmek için kullanılır.
+
+Makine öğrenmesinde veriler genellikle matrisler halinde düzenlenir. Bu matrislerin yapısı şu şekildedir:
+Satırlar, her biri bir veri örneğini temsil eder (örneğin bir resim, bir metin parçası, bir müşteri bilgisi vb.). Sütunlar ise her biri bir özelliği (feature) temsil eder (örneğin bir pikselin renk değeri, bir kelimenin sıklığı, yaş, maaş gibi bilgiler).
+
+Matrisler sayesinde hızlı hesaplamalar yapılabilir (toplama, çarpma, transpoz vb.). Veri dönüşümleri kolaylaşır (ölçekleme, döndürme, boyut indirgeme). Öğrenme algoritmaları bu yapılar üzerinde verimli şekilde çalışır.
+
+Makine öğrenmesi modelini eğitirken, giriş verileri (örneğin resimler veya metin) ağırlıklarla (modelin desenleri öğrenmek için kullandığı değerler) matris çarpımından geçer. Bu süreç, yapay zekanın giriş verisi ile çıkış tahminleri arasındaki ilişkileri tanımasına yardımcı olur.
+
+Matrisler, büyük ve karmaşık veri setlerini daha işlem yapılabilir küçük parçalara ayırmaya yardımcı olur.
+
+Matris çarpımı, makine öğrenmesi modellerinin karmaşık desenleri tanımlamasını sağlar.
+Bu matrisler eğitim sırasında güncellenerek yapay zeka sisteminin sürekli olarak iyileşmesini ve daha doğru hale gelmesini sağlar.
+
+Eigenvectors ve eigen values, bir matrisin iç yapısını tanımlar. Makine öğrenmesinde genellikle veriler matrislere dönüştürülür ve bu matrisler üzerinde çeşitli dönüşümler gerçekleştirilir. Bu dönüşümlerin doğasını anlamak için eigendecomposition veya benzeri matris faktorizasyon teknikleri kullanılır.
+
+
+## Makine Öğrenmesinde Özdeğerler ve Özvektörlerin Kullanımı
+
+### 1. PCA (Principal Component Analysis - Temel Bileşen Analizi):  
+Özdeğerler ve özvektörler, PCA algoritmasında temel bileşenleri (verinin en fazla varyansı gösteren yönleri) bulmak için kullanılır. Bu yöntem, veriyi daha düşük boyutlu bir alana indirgerken, önemli bilgiyi korumaya yardımcı olur.
+
+### 2. Image Compression: 
+Özvektörler, verinin en önemli bileşenlerini temsil eder, bu nedenle gereksiz verileri elemek ve veriyi sıkıştırmak için kullanılabilir. Bu, belleği verimli kullanmayı sağlar.
+
+Özvektörler ve özdeğerler, Görüntü Sıkıştırma için Tekil Değer Ayrıştırması (SVD) gibi tekniklerde kullanılır. Görüntüleri, özvektörler ve özdeğerler cinsinden temsil ederek, depolama gereksinimlerini azaltabilir ve temel görüntü özelliklerini koruyabilirsiniz.
+
+### 3. Support Vector Machines: 
+SVM, sınıflandırma ve regresyon görevleri için kullanılabilen bir makine öğrenmesi algoritmasıdır. SVM'ler, veriyi iki sınıfa ayıran bir hiper düzlem bulmaya çalışır. SVM'nin çekirdek matrisinin özdeğerleri ve özvektörleri, algoritmanın performansını artırmak için kullanılabilir
+
+### 4. Graph Theory: 
+Eigenvectors, networkler ve graphların analizinde önemli bir rol oynar. 
+Sosyal networklerde veya diğer birbirine bağlı sistemlerde önemli düğümleri veya toplulukları bulmak için kullanılabilirler.
+
+### 5. Natural Language Processing (NLP): 
+NLP alanında özvektörler büyük bir belge-terim matrisindeki en ilgili terimleri belirlemeye yardımcı olabilir. Bu, belge alma ve metin özetleme  gibi tekniklerin kullanılmasını sağlayan Latent Semantic Analysis (LSA) gibi yöntemlere olanak tanır.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
