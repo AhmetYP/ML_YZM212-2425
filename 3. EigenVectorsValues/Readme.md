@@ -411,4 +411,16 @@ Bu nedenle, büyük matrislerle çalışırken veya performansın önemli olduğ
 
 
 
+https://www.linkedin.com/pulse/how-do-matrices-work-machine-learning-unlocking-power-deepak-bhandari-yvjqc/
+
+https://machinelearningmastery.com/introduction-matrices-machine-learning/
+
+https://machinelearningmastery.com/introduction-to-eigendecomposition-eigenvalues-and-eigenvectors/
+
+https://bookdown.org/dereksonderegger/571/1-matrix-manipulation.html
+
+https://medium.com/aimonks/eigenvalues-and-eigenvectors-and-their-use-in-machine-learning-and-ai-c7a5431ae388#:~:text=In%20machine%20learning%2C%20eigenvalues%20and,natural%20language%20processing%2C%20and%20robotics.
+
+
+
 
