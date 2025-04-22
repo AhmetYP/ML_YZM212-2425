@@ -163,6 +163,57 @@ NLP alanında özvektörler büyük bir belge-terim matrisindeki en ilgili terim
 
 
 
+# numpy.linalg.eig
+  Bu function input olarak verilen kare matrisin eigenvalues ve right eigenvectors hesaplar.
+## Dokümantasyon  
+ a : (..., M, M) array    PARAMETERS
+ > Girdi olarak verilen veri tipi, liste, matris ya da başka bir şey olabilir ama eig fonksiyonu bunu NumPy dizisine çevirir.
+ 
+ > (M,M) bu ifade  matrisin kare matris olması gerektiğini gösterir.
+
+> (...,) Bu, "broadcasting" ile çok boyutlu matris kümelerinin (batch) desteklendiğini gösterir yani birden fazla kare matristen oluşan bir dizi input olabilir.
+
+ Returns
+
+Fonksiyon bize bir namedtuple döndürüyor. Bu yapı aslında, birden fazla değeri isimlendirilmiş olarak döndürmenin şık bir yolu. Burada dönen tuple iki şey içeriyor:
+
+1) eigenvalues , 2) eigenvectors
+
+ eigenvalues : (..., M) array
+ > Matrisin özdeğerlerini tutan NumPy dizisidir. 
+
+> Eğer bir özdeğer birden fazla kez çıkıyorsa, bu tekrar edilir.
+
+> Özdeğerler büyüklük sırasına göre dizilmez. Sıra rastgele olabilir.
+
+> Sonuçlar kompleks sayı (complex128) olabilir. Ama eğer özdeğerlerin imajiner kısmı sıfırsa, otomatik olarak gerçek sayıya (float64) dönüştürülür.
+
+> Eğer a matrisi gerçek (real) sayılardan oluşuyorsa:
+>
+> Özdeğerler gerçek olabilir veya Veya kompleks eşlenik çiftleri halinde çıkabilir (örneğin 1 + 2j , 1 - 2j)
+
+eigenvectors : (..., M, M) array
+> Matrisin özvektörlerini tutan NumPy dizisidir.
+
+> Her sütun, bir özvektördür.
+>
+> Yani eigenvectors[:, i] → eigenvalues[i] özdeğerine karşılık gelen özvektördür.
+
+> Özvektörler normalize edilmiştir.
+
+
+ Raises
+    ------
+    LinAlgError
+
+ Bu bölüm, fonksiyonun hata (exception) durumlarını anlatır.
+
+ >Python'da bir fonksiyon çalışırken beklenmeyen bir durumla karşılaşırsa, bir hata (exception) fırlatır.
+Raises başlığı da bu fonksiyonun hangi durumda hata vereceğini açıklar.
+
+>Eğer bu algoritma yaklaşım yoluyla özdeğeri bulmakta zorlanırsa, "converge etmedi" der ve LinAlgError fırlatır.
+
+
 
 
 
