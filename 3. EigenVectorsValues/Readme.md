@@ -213,24 +213,118 @@ Raises başlığı da bu fonksiyonun hangi durumda hata vereceğini açıklar.
 
 >Eğer bu algoritma yaklaşım yoluyla özdeğeri bulmakta zorlanırsa, "converge etmedi" der ve LinAlgError fırlatır.
 
+```python
+a, wrap = _makearray(a)
+```
+>Giriş olarak verilen a matrisini NumPy dizisine çeviriyor.
+
+```python
+>wrap, çıktıların şeklinin girişle aynı formatta kalmasını sağlamak için kullanılıyor
+```
+```python
+_assert_stacked_square(a)
+```
+> Giriş matrisinin kare olup olmadığını kontrol eder.
+```python
+_assert_finite(a)
+```
+> Matriste sonsuz (inf) ya da tanımsız (NaN) değer var mı? diye kontrol eder.
+```python
+t, result_t = _commonType(a)
+```
+> a matrisinin veri tipine (float32, complex64, float64, vs.) bakar. Sayısal işlemler için uygun ortak bir tür belirler.
+>
+>  Örnek: float matrisle complex bir matris birlikte işlem görüyorsa, sonuç complex olmalıdır.
+```python
+signature = 'D->DD' if isComplexType(t) else 'd->DD'
+```
+>LAPACK, özdeğer ve özvektör hesaplamaları gibi işlemleri gerçekleştiren bir kütüphanedir ve "signature" parametresi bu fonksiyonların hangi türde veri alıp vereceğini belirtir.
+>
+>isComplexType(t)
+>
+>Bu fonksiyon, matrisin veri tipini kontrol eder ve complex (karmaşık) sayı içerip içermediğini belirler. Eğer complex sayı içeriyorsa True döndürecektir.
+
+>'D->DD' Bu imza, karmaşık sayılarla çalışıldığını ve sonuçların karmaşık sayılar olacağını belirtir.
+
+>Bu imza, girişin gerçek sayılar içerdiğini ama yine de karmaşık sayılarla çalışılacağını belirtir.
+>
+>Eğer karmaşık sayılar varsa (isComplexType(t) True dönerse), signature 'D->DD' olur. Yani karmaşık sayılarla işlem yapılacak.
+>
+>Eğer gerçek sayılar varsa, signature 'd->DD' olur. Burada karmaşık sayılara dönüştürülerek işlem yapılır.
 
 
+```python
+with errstate(call=_raise_linalgerror_eigenvalues_nonconvergence, 
+              invalid='call', over='ignore', divide='ignore', 
+              under='ignore'):
+    w, vt = _umath_linalg.eig(a, signature=signature
+```
+errstate() Nedir?
+>errstate() fonksiyonu, hata durumlarını yönetmek için kullanılır.
+
+errstate() Parametreleri
+call=_raise_linalgerror_eigenvalues_nonconvergence:
+
+>_raise_linalgerror_eigenvalues_nonconvergence: Bu özel hata fonksiyonu, özdeğerlerin hesaplanamaması durumunda çağrılır ve hata mesajı verir.
+
+invalid='call'
+>Sayısal bir işlem geçersiz olduğunda, örneğin "NaN" (Not-a-Number) bir değerle karşılaşıldığında, hata meydana gelir. Bu durumda işlem call olarak yönetilir ve fonksiyon çağrılır.
+
+over='ignore'
+>Bu parametre, aşırı büyük sayılar (overflow) ile karşılaşıldığında işlem yapılmasına izin verir, yani overflow hatası olsa bile işlem yapılır ve bir hata mesajı verilmez.
+
+divide='ignore'
+>Bu parametre, sıfıra bölme durumunu yönetir. Eğer sıfıra bölme olursa, hata yerine işlem yapılır ve sonuç bilinmeyen bir değeri (örneğin, inf veya NaN) döndürebilir.
+
+under='ignore'
+>Bu, aşırı küçük sayılar (underflow) ile karşılaşıldığında ne yapılacağını belirtir. Bu durumda işlem yapılır ve sonuç düşük hassasiyetle elde edilebilir.
+
+_umath_linalg.eig(a, signature=signature) Fonksiyonu
+>_umath_linalg.eig fonksiyonu, LAPACK'ın alt modüllerinden biri olan eig fonksiyonunu çağırır. Bu fonksiyon, giriş matrisinin özdeğerlerini (w) ve özvektörlerini (vt) hesaplar.
+>
+>w: Özdeğerleri içeren bir vektördür.
+>vt: Özvektörlerin sütunlar halinde olduğu bir matrisi döndürür.
+
+```python
+if not isComplexType(t) and all(w.imag == 0.0):
+    w = w.real
+    vt = vt.real
+    result_t = _realType(result_t)
+else:
+    result_t = _complexType(result_t)
+```
+if not isComplexType(t) and all(w.imag == 0.0)
+>Bu satır, özellikle özdeğerler ve özvektörlerle çalışırken veri türünü kontrol etmek ve gerektiğinde dönüşüm yapmak için kullanılır.
+>
+>w.imag == 0.0 kısmı tüm özdeğerlerin karmaşık kısmını 0 olup olmadığını kontrol eder.
+
+w = w.real ve vt = vt.real
+> Karmaşık olan kısımları varsa eğer bu işlemle beraber sadece reel kısımları alınır.
+
+result_t = _realType(result_t)
+>Burada, result_t değişkeninin tipi gerçek sayılar (real numbers) olarak değiştirilir.
+
+else: result_t = _complexType(result_t)
+>Eğer önceki if koşulu sağlanmazsa (yani, özdeğerler karmaşık sayılarsa), result_t karmaşık sayılar olacak şekilde güncellenir.
+```python
+vt = vt.astype(result_t, copy=False)
+```
+> Özvektör matrisini, daha önce belirlenen result_t tipine dönüştürüyor.
+
+```python
+return EigResult(w.astype(result_t, copy=False), wrap(vt))
+```
+>w ve vt'yi EigResult adında bir namedtuple yapısına koyarak döndürüyor. w = eigenvalues, vt = eigenvectors
+>
+>wrap(vt) → Çıktı formatı, girişle aynı düzeni korusun diye uygulanır.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+1. Girdiyi düzenle
+2. Kare matris mi, sonlu mu? → kontrol et
+3. Veri tipi belirle
+4. LAPACK fonksiyonu ile özdeğer ve özvektör hesapla
+5. Gerekirse complex → real dönüşüm yap
+6. Sonucu uygun formatta döndür
 
 
 
