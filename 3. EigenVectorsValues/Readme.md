@@ -326,6 +326,89 @@ return EigResult(w.astype(result_t, copy=False), wrap(vt))
 5. Gerekirse complex → real dönüşüm yap
 6. Sonucu uygun formatta döndür
 
+# NumPy ve Manuel Yöntem ile Özdeğer Hesaplama: Hız Karşılaştırması
+
+Bu belgede, NumPy'ın `eig` fonksiyonuyla manuel olarak yazılmış bir özdeğer hesaplama yönteminin hız farklarını ve bu farkların nedenlerini açıklıyoruz.
+
+---
+
+## Hız Farklarının Nedenleri
+
+### 1. **Algoritmanın Karmaşıklığı**
+- **Manuel Yöntem:**
+  - Determinantların hesaplanması ve köklerin bulunması işlemleri birçok adım içerir.
+  - Büyük matrislerde determinant hesaplama işlemi, çok sayıda alt matris bölünmesini gerektirir ve karmaşıklık \(O(n!)\) seviyesine kadar çıkar.
+  - Polinom köklerini bulma işlemi iteratif olduğundan zaman alıcıdır.
+  
+- **NumPy Yöntemi:**
+  - NumPy, optimize edilmiş algoritmalar (örn. Hessenberg dönüşümü, QR algoritması) kullanır.
+  - Bu algoritmalar genellikle \(O(n^3)\) karmaşıklıkta çalışır ve daha verimlidir.
+
+---
+
+### 2. **Kütüphane Optimizasyonu**
+- **NumPy:**
+  - Düşük seviyeli dillerle (C ve Fortran) yazılmıştır ve donanım performansını maksimum seviyede kullanır.
+  - Altında **LAPACK** (Linear Algebra PACKage) gibi yüksek performanslı doğrusal cebir kütüphanelerini kullanır.
+  - Paralel işlemeyi destekler ve donanım hızlandırmalarından yararlanır.
+
+---
+
+### 3. **Bellek Yönetimi**
+- **Manuel Yöntem:**
+  - Alt matrislerin hesaplanması ve saklanması yüksek bellek tüketimine yol açar.
+  - Bellek yönetimi Python’un yorumlayıcı düzeyinde çalıştığı için yavaştır.
+
+- **NumPy Yöntemi:**
+  - Belleği düşük seviyede yönetir ve veri kopyalamadan işlem yapar.
+  - Matris işlemlerinde doğrudan bellek adresleri üzerinden işlem yaparak hız kazanır.
+
+---
+
+### 4. **Dil ve Yorumlayıcı Faktörü**
+- **Manuel Yöntem:**
+  - Python yorumlayıcı ile çalıştığı için her işlem satır satır değerlendirilir.
+  - Optimizasyon eksikliği nedeniyle daha fazla işlem yükü oluşturur.
+
+- **NumPy Yöntemi:**
+  - Python yorumlayıcısından bağımsız çalışır ve düşük seviyede optimize edilmiştir.
+  - İşlemler, makine koduna yakın bir düzeyde çalıştırılır.
+
+---
+
+### 5. **Polinom Köklerinin Hesaplanması**
+- **Manuel Yöntem:**
+  - Polinom köklerini bulma işlemi, iteratif yöntemlerle genel amaçlı çözülür. Bu, ek süre gerektirir.
+  
+- **NumPy Yöntemi:**
+  - `np.roots()` fonksiyonu, kök bulma işlemleri için optimize edilmiş algoritmalar kullanır.
+
+---
+
+### 6. **Paralel İşleme**
+- **Manuel Yöntem:**
+  - Tek iş parçacığıyla çalışır. Bu, özellikle determinant ve kök hesaplama gibi tekrarlayan işlemlerde darboğaz yaratır.
+
+- **NumPy Yöntemi:**
+  - BLAS ve LAPACK gibi kütüphaneler sayesinde paralel işlemeyi destekler ve birden fazla işlemci çekirdeğini aynı anda kullanır.
+
+---
+
+### 7. **Test Edilmiş ve Güvenilir Yöntemler**
+- **NumPy:**
+  - Binlerce test ve gerçek dünya uygulamalarında doğrulanmıştır.
+  - Özdeğer problemleri için büyük boyutlu matrislerde kararlı sonuçlar sunar.
+
+---
+
+## Sonuç
+NumPy'ın `eig` fonksiyonu, manuel hesaplama yöntemine göre:
+- Daha hızlı,
+- Daha optimize,
+- Daha güvenilirdir.
+
+Bu nedenle, büyük matrislerle çalışırken veya performansın önemli olduğu durumlarda, NumPy'ın hazır fonksiyonları tercih edilmelidir.
+
 
 
 
